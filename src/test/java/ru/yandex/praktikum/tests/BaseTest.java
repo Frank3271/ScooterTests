@@ -36,4 +36,5 @@ public class BaseTest {
             driver.quit();
         }
     }
-} // конец теста
+    // updated for pull request
+}
