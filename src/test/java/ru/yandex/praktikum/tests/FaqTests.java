@@ -37,4 +37,5 @@ public class FaqTests extends BaseTest {
         String actualText = homePage.getAnswerText(index);
         assertEquals("Текст ответа для вопроса " + index + " не совпадает", expectedText, actualText);
     }
+    // updated for PR
 }

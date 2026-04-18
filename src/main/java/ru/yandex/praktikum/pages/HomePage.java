@@ -45,4 +45,5 @@ public class HomePage {
     public String getAnswerText(int index) {
         return driver.findElement(getAnswerLocator(index)).getText();
     }
+    // этот комментарий нужен
 }

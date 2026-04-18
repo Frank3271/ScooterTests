@@ -58,4 +58,5 @@ public class OrderTests extends BaseTest {
         orderPage.fillSecondPart(date, rentalPeriod, color, comment);
         assertTrue("Заказ не был оформлен", orderPage.isOrderSuccess());
     }
+    // updated for PR
 }
