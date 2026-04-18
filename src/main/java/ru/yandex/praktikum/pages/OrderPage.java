@@ -48,48 +48,33 @@ public class OrderPage {
     }
 
     public void fillSecondPart(String date, String rentalPeriod, String color, String comment) {
-        // Поле "Дата"
         WebElement dateElement = driver.findElement(dateInput);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", dateElement);
         dateElement.sendKeys(date);
         dateElement.sendKeys(Keys.ENTER);
-        try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
 
-        // Выпадающий список "Срок аренды"
-        WebElement dropdown = driver.findElement(rentalPeriodDropdown);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", dropdown);
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(dropdown)).click();
+        // Явное ожидание: поле даты не пустое
+        new WebDriverWait(driver, Duration.ofSeconds(15))
+                .until(ExpectedConditions.attributeToBeNotEmpty(dateElement, "value"));
 
-        // Выбор варианта срока
-        WebElement option = driver.findElement(By.xpath("//div[contains(@class, 'Dropdown-option') and text()='" + rentalPeriod + "']"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", option);
-        option.click();
+        driver.findElement(rentalPeriodDropdown).click();
+        driver.findElement(By.xpath("//div[contains(@class, 'Dropdown-option') and text()='" + rentalPeriod + "']")).click();
 
-        // Выбор цвета
         if (color.equals("black")) {
-            WebElement black = driver.findElement(By.id("black"));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", black);
-            black.click();
+            driver.findElement(By.id("black")).click();
         } else if (color.equals("grey")) {
-            WebElement grey = driver.findElement(By.id("grey"));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", grey);
-            grey.click();
+            driver.findElement(By.id("grey")).click();
         }
 
-        // Комментарий
         driver.findElement(commentInput).sendKeys(comment);
+        driver.findElement(orderButton).click();
 
-        // Кнопка "Заказать"
-        WebElement orderBtn = driver.findElement(orderButton);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", orderBtn);
-        orderBtn.click();
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(),'Хотите оформить заказ?')]")));
 
-        // Ждём появления модального окна подтверждения
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(confirmModal));
 
-        // Теперь ждём, когда кнопка "Да" станет кликабельной
-        wait.until(ExpectedConditions.elementToBeClickable(confirmButton)).click();
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.elementToBeClickable(confirmButton));
+        driver.findElement(confirmButton).click();
     }
 
     public boolean isOrderSuccess() {
