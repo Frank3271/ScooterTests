@@ -15,8 +15,8 @@ public class FaqTests extends BaseTest {
         this.index = index;
         this.expectedText = expectedText;
     }
-
-    @Parameterized.Parameters
+    // тоже
+    @Parameterized.Parameters(name = "Вопрос №{0}: ожидаемый текст: {1}")
     public static Object[][] getData() {
         return new Object[][]{
                 {0, "Сутки — 400 рублей. Оплата курьеру — наличными или картой."},
@@ -33,6 +33,7 @@ public class FaqTests extends BaseTest {
     @Test
     public void checkFaqText() {
         HomePage homePage = new HomePage(driver);
+        homePage.closeCookieBannerIfPresent();
         homePage.clickQuestion(index);
         String actualText = homePage.getAnswerText(index);
         assertEquals("Текст ответа для вопроса " + index + " не совпадает", expectedText, actualText);

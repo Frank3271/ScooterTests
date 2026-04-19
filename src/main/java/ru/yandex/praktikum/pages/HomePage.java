@@ -13,10 +13,12 @@ public class HomePage {
 
     private By orderButtonTop = By.xpath("//button[text()='Заказать']");
     private By orderButtonBottom = By.xpath("(//button[text()='Заказать'])[2]");
+    private By cookieBannerButton = By.xpath("//button[text()='Да все привыкли']");
 
     private By getQuestionLocator(int index) {
         return By.xpath(".//div[contains(@class, 'accordion__item')][" + (index+1) + "]//div[contains(@class, 'accordion__button')]");
     }
+
     private By getAnswerLocator(int index) {
         return By.xpath(".//div[contains(@class, 'accordion__item')][" + (index+1) + "]//div[contains(@class, 'accordion__panel')]");
     }
@@ -44,5 +46,14 @@ public class HomePage {
 
     public String getAnswerText(int index) {
         return driver.findElement(getAnswerLocator(index)).getText();
+    }
+
+    public void closeCookieBannerIfPresent() {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+            wait.until(ExpectedConditions.elementToBeClickable(cookieBannerButton)).click();
+        } catch (Exception e) {
+            // ничего не делаем
+        }
     }
 }

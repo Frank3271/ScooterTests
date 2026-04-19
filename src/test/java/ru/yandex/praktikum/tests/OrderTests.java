@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class OrderTests extends BaseTest {
-
     private final String name;
     private final String lastName;
     private final String address;
@@ -35,7 +34,7 @@ public class OrderTests extends BaseTest {
         this.useTopButton = useTopButton;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Тест {0} {1} – кнопка {9}")
     public static Object[][] getOrderData() {
         return new Object[][]{
                 {"Иван", "Петров", "ул. Ленина, 1", "Лубянка", "89991234567",
@@ -48,11 +47,14 @@ public class OrderTests extends BaseTest {
     @Test
     public void orderScooter() {
         HomePage homePage = new HomePage(driver);
+        homePage.closeCookieBannerIfPresent();  // закрыть баннер, если он есть
+
         if (useTopButton) {
             homePage.clickOrderButtonTop();
         } else {
             homePage.clickOrderButtonBottom();
         }
+
         OrderPage orderPage = new OrderPage(driver);
         orderPage.fillFirstPart(name, lastName, address, metroStation, phone);
         orderPage.fillSecondPart(date, rentalPeriod, color, comment);
